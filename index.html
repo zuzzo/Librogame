@@ -254,6 +254,7 @@
       background: rgba(11,15,23,.86);
       backdrop-filter: blur(6px);
       display:none;
+      overflow:auto;
     }
     .simPanel{
       max-width: 720px;
@@ -265,7 +266,8 @@
       box-shadow: 0 20px 60px rgba(0,0,0,.45);
       font-family: "Times New Roman", Times, serif;
       max-height: 80vh;
-      overflow: auto;
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
     .simTitle{
       font-size:20px;
@@ -947,6 +949,8 @@
   simOverlay.addEventListener('click', (ev) => {
     if (ev.target === simOverlay) simOverlay.style.display = 'none';
   });
+  simOverlay.addEventListener('wheel', (ev) => { ev.stopPropagation(); }, {passive:true});
+  simOverlay.addEventListener('touchmove', (ev) => { ev.stopPropagation(); }, {passive:true});
 
   fileImport.addEventListener('change', async () => {
     const f = fileImport.files?.[0];
