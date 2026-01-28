@@ -1,12 +1,12 @@
 {
   "version": 1,
   "viewport": {
-    "scale": 0.6446575119752112,
-    "panX": 382.5188875614417,
-    "panY": 28.315435217186575
+    "scale": 0.6116820609970273,
+    "panX": 257.8708169998864,
+    "panY": -19.479220940244886
   },
-  "nextNodeId": 6,
-  "nextEdgeId": 7,
+  "nextNodeId": 11,
+  "nextEdgeId": 16,
   "nodes": [
     {
       "id": "N1",
@@ -21,8 +21,8 @@
     {
       "id": "N2",
       "title": "Papà",
-      "x": 614.802110817942,
-      "y": 107.04485488126653,
+      "x": 107.92370964743233,
+      "y": -143.01727814190073,
       "inputs": 1,
       "outputs": 2,
       "content": "Mio papà insegna all’università.\nInsegna lettere.\n\nDice che le parole sono importanti, perché restano anche quando le persone non possono più parlare.\n\nHa scritto dei libri.\nLa sua stanza è piena di libri, così piena che a volte non si sa dove sedersi.\nPer questo può insegnare anche a me e a mia sorella.\n\nLa mamma dice che papà è diventato più silenzioso da quando non va più a insegnare.\n\nFino a poco tempo fa venivano a casa alcuni suoi studenti per fare ripetizioni.\nUno alla volta hanno smesso di venire.\n\nIn cambio delle lezioni ci portavano del cibo.\nA noi andava bene così.\n\nAdesso gli unici studenti di papà siamo io e mia sorella Anna.",
@@ -31,21 +31,21 @@
     {
       "id": "N3",
       "title": "La sorella Anna",
-      "x": 687.5197889182059,
-      "y": 480.76517150395784,
+      "x": 530.2657907148043,
+      "y": 230.2509448822276,
       "inputs": 1,
-      "outputs": 1,
-      "content": "Mia sorella si chiama Anna.\nHa quattro anni più di me.\n\nL’estate scorsa aveva detto che si sarebbe sposata.\nLo aveva detto piano, come se non fosse sicura.\n\nPoi non se n’è più parlato.\n\nDa quel giorno Anna non è più uscita di casa.\nPassa molto tempo alla finestra.\nLegge.\nAiuta la mamma in cucina.\n\nIl suo fidanzato si chiamava Paolo.\nVeniva spesso a cena da noi.\nParlava con papà di libri e di lavoro.\n\nPoi, all’improvviso, non è più venuto.\n\nQualche volta ho chiesto ad Anna che fine avesse fatto Paolo.\nLei non risponde.\nQuando qualcuno lo nomina, cambia espressione.\nE guarda da un’altra parte.",
+      "outputs": 2,
+      "content": "Mia sorella si chiama Anna.\nHa sei anni più di me.\n\nL’estate scorsa aveva un fidanzato, si chiamava Paolo ed aveva tre anni più di lei.\nUn giorno mi disse che lui gli aveva promesso di sposarla, ma era un segreto.\nMe lo aveva detto piano, come se non fosse sicura.\n\nPoi non se n’è più parlato.\n\nDa quel giorno Anna non è più uscita di casa.\nPassa molto tempo alla finestra.\nLegge.\nAiuta la mamma in cucina.\n\nPaolo era il figlio di alcuni colleghi di mio padre. A volte rimaneva a cena da noi.\nGli piaceva parlare con papà di libri e di lavoro.\n\nPoi, all’improvviso, non è più venuto.\n\nQualche volta ho chiesto ad Anna che fine avesse fatto Paolo.\nLei non risponde.\nQuando qualcuno lo nomina, cambia espressione.\nE guarda da un’altra parte.",
       "colorIndex": 0
     },
     {
       "id": "N4",
       "title": "Lezioni in casa",
-      "x": 256.4437376990725,
-      "y": 668.5086419263845,
+      "x": 447.81089955070183,
+      "y": 776.5748039131869,
       "inputs": 1,
       "outputs": 2,
-      "content": "Ci sediamo al tavolo del soggiorno.\nIo, Anna e papà.\n\nPapà ha portato una lavagna.\nCon il gesso ha disegnato l’Italia e una parte dell’Europa.\nHa tracciato delle linee.\nHa colorato alcune zone.\n\nLa Francia è bianca.\nAnche la Germania.\nAnche la Polonia.\n\nPapà dice che in Europa stanno soffiando venti cattivi.\nDice che quando arrivano, non si fermano subito.\n\nLa geografia mi piace.\nMi piace guardare le mappe e pensare a come sono i posti lontani.\nVorrei vedere il mondo.\nVorrei viaggiare.\n\nMa resto in casa.\nIl mondo lo guardo dalla finestra e dai libri.\nE per ora va bene così.\n\nAnna una volta è stata in Svizzera.\nDice che è un posto bellissimo.\n\nVorrei andarci con lei.\nVorrei vedere i luoghi che mi racconta.",
+      "content": "Ci sediamo al tavolo del soggiorno.\nIo, Anna e papà.\n\nPapà ha portato una lavagna.\nCon il gesso ha disegnato l’Italia e una parte dell’Europa.\nHa tracciato delle linee.\nHa colorato alcune zone.\n\nLa Francia è bianca.\nAnche la Germania.\nAnche la Polonia.\n\nPapà dice che in Europa stanno soffiando venti cattivi.\nDice che quando arrivano, non si fermano subito.\n\nLa geografia mi piace.\nMi piace guardare le mappe e pensare a come sono i posti lontani.\nVorrei vedere il mondo.\nVorrei viaggiare.\n\nMa resto in casa.\nIl mondo lo guardo dalla finestra e dai libri.\nE per ora va bene così.\n\nAnna una volta è stata in Austria da alcuni parenti.\nDice che è un posto bellissimo.\n\nVorrei andarci con lei.\nVorrei vedere i luoghi che mi racconta.",
       "colorIndex": 0
     },
     {
@@ -56,6 +56,56 @@
       "inputs": 1,
       "outputs": 2,
       "content": "Caro diario,\n\nla mia stanza non è grande, ma mi piace. Il letto è vicino alla finestra e la mattina mi sveglio con la luce che entra tra le tende. Dal cortile sento le voci delle persone che parlano e a volte qualcuno fischietta. Quando c’è il sole, sulla parete si disegna un rettangolo luminoso che si sposta piano piano, e io cerco di indovinare dove arriverà prima che finisca la mattina.\n\nLa scrivania è sempre un po’ in disordine. Ci sono i quaderni, le matite temperate male e un libro di latino che pesa più degli altri. Papà dice che è importante tenerla in ordine, ma poi è il primo a lasciare i suoi fogli sopra i miei quaderni. Non mi dispiace, perché così sembra che studiamo insieme.\n\nHo anche una scatola sotto il letto. Dentro ci tengo le biglie, qualche soldatino e un coltellino che mi hanno regalato. Non lo uso quasi mai, ma mi piace sapere che c’è. Ogni tanto lo tiro fuori solo per guardarlo.\n\nSulla parete c’è la cartina dell’Italia. La guardo spesso, anche se ormai so quasi tutte le regioni. Anna dice che è inutile tenerla, ma io la lascerei lì per sempre. Mi piace immaginare come sono i posti lontani, anche quelli che non visiterò mai.\n\nQuando chiudo la porta della stanza, mi sento tranquillo. Qui posso leggere, scrivere o stare fermo senza fare nulla. La mamma dice che sto diventando bravo a stare da solo, ma io non credo sia vero: è solo che in camera mia il tempo passa più veloce",
+      "colorIndex": 0
+    },
+    {
+      "id": "N6",
+      "title": "Ottobre 1938 – Una notte rumorosa",
+      "x": 1771.0323036384364,
+      "y": 656.3658624161467,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\nstanotte non riesco a dormire. Dal cortile arrivano voci e passi, come se qualcuno entrasse e uscisse di continuo. A un certo punto una porta ha sbattuto forte e mi sono girato nel letto.\n\nLa mamma dice che non è niente. Papà parla a bassa voce. Io ascolto dal buio e conto i rumori, uno dopo l’altro.\n\nPoi, senza che me ne accorga, tutto tace.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N7",
+      "title": "Ottobre 1938 – La cena",
+      "x": 978.7054722976009,
+      "y": -172.67114516514513,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\na cena la mamma ha preparato il pollo con le patate, come fa spesso il venerdì. Prima di mangiare papà dice poche parole sottovoce, come sempre. Io le so quasi a memoria e le dico piano anche io.\n\nAnna mangia poco. La mamma le chiede se non ha fame, ma lei scuote la testa. A un certo punto la mamma nomina Paolo, solo per dire che non si è più fatto vedere. Papà posa la forchetta e non dice niente. Si vede che è contrariato.\n\nLa mamma appoggia una mano su quella di Anna e le dice che passerà. Anna abbassa gli occhi. Io continuo a mangiare e penso che il pollo è buono, forse più del solito.\n\nDopo cena sparecchiamo in silenzio",
+      "colorIndex": 0
+    },
+    {
+      "id": "N8",
+      "title": "Ottobre 1938 – Uno strano sogno",
+      "x": 2219.944156741615,
+      "y": 1188.0914260548109,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\nero molto stanco e mi sono addormentato subito. Ho fatto uno strano sogno. Ero in un posto grande, senza finestre, e c’erano tante persone come me. Non parlavamo, ma ci capivamo lo stesso.\n\nNel sogno cercavo qualcuno della mia famiglia, ma tutti avevano il viso un po’ sfocato, come quando si guarda attraverso un vetro sporco. Camminavamo insieme, senza sapere dove andare, e nessuno chiedeva niente.\n\nQuando mi sono svegliato, ci ho pensato solo per un momento. Poi ho sentito la mamma muoversi in casa e il sogno è rimasto lì, come una cosa che non serve ricordare.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N9",
+      "title": "Lo straccivendolo",
+      "x": 2213.3990854908043,
+      "y": 587.7254319286244,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\ni rumori diventano più forti e mi affaccio alla finestra. Nel cortile ci sono alcuni uomini con la camicia nera. Parlano ad alta voce e tengono fermo un uomo che non abita nel nostro palazzo. L’ho visto altre volte in strada, con un carretto e dei panni colorati.\n\nUno degli uomini lo spinge verso il muro. Non lo picchiano, ma lo fanno stare zitto. Gli dicono che non può stare lì. L’uomo prova a rispondere, poi abbassa la testa.\n\nQualcuno ride. Un altro dice che deve andarsene. Alla fine lo lasciano andare, e lui se ne va in fretta, trascinando le sue cose.\n\nChiudo la tenda. Resto fermo un momento, poi torno a letto. I rumori piano piano si spengono.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N10",
+      "title": "L'Austria",
+      "x": 811.0154405435885,
+      "y": 989.4444281861257,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\nqualche tempo fa Anna è stata in Austria, da alcuni parenti. Io non ci sono mai stato, ma lei dice che le montagne sono alte e che l’aria è diversa. Quando è tornata, però, parlava meno del solito.\n\nUna sera ho sentito papà chiederle com’era andata davvero. Anna ha detto che là le cose sono cambiate in fretta. Che alcune persone non escono più come prima. Papà ha annuito, come se già lo sapesse.\n\nLa mamma ha detto che qui è diverso, che l’Italia è un altro paese. Anna non ha risposto. Io ho pensato che i paesi, visti sulla cartina, sembrano tutti uguali.",
       "colorIndex": 0
     }
   ],
@@ -119,6 +169,114 @@
         "portIndex": 0
       },
       "label": "Ora devo andare, mio papà mi sta chiamando. Inizia la lezione."
+    },
+    {
+      "id": "E7",
+      "from": {
+        "nodeId": "N3",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N7",
+        "portIndex": 0
+      },
+      "label": "... e poi si cenava tutti insieme."
+    },
+    {
+      "id": "E8",
+      "from": {
+        "nodeId": "N2",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N7",
+        "portIndex": 0
+      },
+      "label": "La mia famiglia cena insieme."
+    },
+    {
+      "id": "E9",
+      "from": {
+        "nodeId": "N3",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N5",
+        "portIndex": 0
+      },
+      "label": "Ti posso descrivere la mia camera?"
+    },
+    {
+      "id": "E10",
+      "from": {
+        "nodeId": "N5",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N6",
+        "portIndex": 0
+      },
+      "label": "Quella notte non avevo sonno."
+    },
+    {
+      "id": "E11",
+      "from": {
+        "nodeId": "N7",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N6",
+        "portIndex": 0
+      },
+      "label": "quella sera andai a letto, ma..."
+    },
+    {
+      "id": "E12",
+      "from": {
+        "nodeId": "N5",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N8",
+        "portIndex": 0
+      },
+      "label": "ero molto stanco. Ho fatto uno strano sogno. Posso raccontartelo."
+    },
+    {
+      "id": "E13",
+      "from": {
+        "nodeId": "N6",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N8",
+        "portIndex": 0
+      },
+      "label": "Poi mi sono addormentato."
+    },
+    {
+      "id": "E14",
+      "from": {
+        "nodeId": "N6",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N9",
+        "portIndex": 0
+      },
+      "label": "Sono rimasto sveglio tutta la notte."
+    },
+    {
+      "id": "E15",
+      "from": {
+        "nodeId": "N4",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N10",
+        "portIndex": 0
+      },
+      "label": "Il viaggio in Austri"
     }
   ]
 }
