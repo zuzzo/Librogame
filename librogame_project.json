@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "viewport": {
+    "scale": 0.6446575119752112,
+    "panX": 382.5188875614417,
+    "panY": 28.315435217186575
+  },
+  "nextNodeId": 6,
+  "nextEdgeId": 7,
+  "nodes": [
+    {
+      "id": "N1",
+      "title": "Inizio",
+      "x": -258.5168998448079,
+      "y": 149.02806409060196,
+      "inputs": 1,
+      "outputs": 3,
+      "content": "Caro diario,\n\nanche oggi siamo rimasti in casa a studiare.\nDa alcuni giorni non andiamo più a scuola.\n\nPapà dice che è solo per un po’.\nHa provato a far venire un insegnante privato, ma l’insegnante non vuole entrare in casa nostra.\nNon ha spiegato il motivo.\n\nPapà allora studia con me e con mia sorella.\nLei è più grande di me e capisce le cose prima.\nPapà non va più al lavoro da qualche giorno.\nDice che adesso ha tempo.\n\nStudiamo insieme.\nA volte mi sembra contento di poter restare con noi.\nA volte no.\n\nOra devo smettere di scrivere.\nPapà mi sta chiamando.",
+      "colorIndex": 9
+    },
+    {
+      "id": "N2",
+      "title": "Papà",
+      "x": 614.802110817942,
+      "y": 107.04485488126653,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Mio papà insegna all’università.\nInsegna lettere.\n\nDice che le parole sono importanti, perché restano anche quando le persone non possono più parlare.\n\nHa scritto dei libri.\nLa sua stanza è piena di libri, così piena che a volte non si sa dove sedersi.\nPer questo può insegnare anche a me e a mia sorella.\n\nLa mamma dice che papà è diventato più silenzioso da quando non va più a insegnare.\n\nFino a poco tempo fa venivano a casa alcuni suoi studenti per fare ripetizioni.\nUno alla volta hanno smesso di venire.\n\nIn cambio delle lezioni ci portavano del cibo.\nA noi andava bene così.\n\nAdesso gli unici studenti di papà siamo io e mia sorella Anna.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N3",
+      "title": "La sorella Anna",
+      "x": 687.5197889182059,
+      "y": 480.76517150395784,
+      "inputs": 1,
+      "outputs": 1,
+      "content": "Mia sorella si chiama Anna.\nHa quattro anni più di me.\n\nL’estate scorsa aveva detto che si sarebbe sposata.\nLo aveva detto piano, come se non fosse sicura.\n\nPoi non se n’è più parlato.\n\nDa quel giorno Anna non è più uscita di casa.\nPassa molto tempo alla finestra.\nLegge.\nAiuta la mamma in cucina.\n\nIl suo fidanzato si chiamava Paolo.\nVeniva spesso a cena da noi.\nParlava con papà di libri e di lavoro.\n\nPoi, all’improvviso, non è più venuto.\n\nQualche volta ho chiesto ad Anna che fine avesse fatto Paolo.\nLei non risponde.\nQuando qualcuno lo nomina, cambia espressione.\nE guarda da un’altra parte.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N4",
+      "title": "Lezioni in casa",
+      "x": 256.4437376990725,
+      "y": 668.5086419263845,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Ci sediamo al tavolo del soggiorno.\nIo, Anna e papà.\n\nPapà ha portato una lavagna.\nCon il gesso ha disegnato l’Italia e una parte dell’Europa.\nHa tracciato delle linee.\nHa colorato alcune zone.\n\nLa Francia è bianca.\nAnche la Germania.\nAnche la Polonia.\n\nPapà dice che in Europa stanno soffiando venti cattivi.\nDice che quando arrivano, non si fermano subito.\n\nLa geografia mi piace.\nMi piace guardare le mappe e pensare a come sono i posti lontani.\nVorrei vedere il mondo.\nVorrei viaggiare.\n\nMa resto in casa.\nIl mondo lo guardo dalla finestra e dai libri.\nE per ora va bene così.\n\nAnna una volta è stata in Svizzera.\nDice che è un posto bellissimo.\n\nVorrei andarci con lei.\nVorrei vedere i luoghi che mi racconta.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N5",
+      "title": "Cameretta ottobre 38",
+      "x": 1160.7061211183168,
+      "y": 759.3990624514871,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\nla mia stanza non è grande, ma mi piace. Il letto è vicino alla finestra e la mattina mi sveglio con la luce che entra tra le tende. Dal cortile sento le voci delle persone che parlano e a volte qualcuno fischietta. Quando c’è il sole, sulla parete si disegna un rettangolo luminoso che si sposta piano piano, e io cerco di indovinare dove arriverà prima che finisca la mattina.\n\nLa scrivania è sempre un po’ in disordine. Ci sono i quaderni, le matite temperate male e un libro di latino che pesa più degli altri. Papà dice che è importante tenerla in ordine, ma poi è il primo a lasciare i suoi fogli sopra i miei quaderni. Non mi dispiace, perché così sembra che studiamo insieme.\n\nHo anche una scatola sotto il letto. Dentro ci tengo le biglie, qualche soldatino e un coltellino che mi hanno regalato. Non lo uso quasi mai, ma mi piace sapere che c’è. Ogni tanto lo tiro fuori solo per guardarlo.\n\nSulla parete c’è la cartina dell’Italia. La guardo spesso, anche se ormai so quasi tutte le regioni. Anna dice che è inutile tenerla, ma io la lascerei lì per sempre. Mi piace immaginare come sono i posti lontani, anche quelli che non visiterò mai.\n\nQuando chiudo la porta della stanza, mi sento tranquillo. Qui posso leggere, scrivere o stare fermo senza fare nulla. La mamma dice che sto diventando bravo a stare da solo, ma io non credo sia vero: è solo che in camera mia il tempo passa più veloce",
+      "colorIndex": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "E1",
+      "from": {
+        "nodeId": "N1",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N2",
+        "portIndex": 0
+      },
+      "label": "Posso raccontarti di papà."
+    },
+    {
+      "id": "E2",
+      "from": {
+        "nodeId": "N1",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N3",
+        "portIndex": 0
+      },
+      "label": "Mia sorella Anna"
+    },
+    {
+      "id": "E3",
+      "from": {
+        "nodeId": "N1",
+        "portIndex": 2
+      },
+      "to": {
+        "nodeId": "N4",
+        "portIndex": 0
+      },
+      "label": "...ora vado in classe"
+    },
+    {
+      "id": "E5",
+      "from": {
+        "nodeId": "N4",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N5",
+        "portIndex": 0
+      },
+      "label": "Posso descriverti la mia stanza."
+    },
+    {
+      "id": "E6",
+      "from": {
+        "nodeId": "N2",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N4",
+        "portIndex": 0
+      },
+      "label": "Ora devo andare, mio papà mi sta chiamando. Inizia la lezione."
+    }
+  ]
+}
