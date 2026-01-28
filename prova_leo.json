@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "viewport": {
+    "scale": 1.6429152193885344,
+    "panX": 563.4256253055314,
+    "panY": 0.7413534888213462
+  },
+  "nextNodeId": 4,
+  "nextEdgeId": 3,
+  "nodes": [
+    {
+      "id": "N1",
+      "title": "Inizio",
+      "x": 180,
+      "y": 160,
+      "inputs": 0,
+      "outputs": 2,
+      "content": "Il vento dell'Est sta arrivando in fretta, i nemici si avvicinano. Non abbiamo scampo, non dobbiamo scappare dal nostro destino.\n27 Aprile\nI tuoni sono accanto a noi, stanno arrivando.",
+      "colorIndex": 8
+    },
+    {
+      "id": "N2",
+      "title": "Capitolo 1",
+      "x": 781.1591944540459,
+      "y": 168.9346507552456,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Scegli se entrare o fuggire.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N3",
+      "title": "Capitolo N3",
+      "x": -306.64723038224383,
+      "y": 165.8300408475069,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "ti nascondi sotto la botola. C'è molto freddo qua ",
+      "colorIndex": 0
+    }
+  ],
+  "edges": [
+    {
+      "id": "E1",
+      "from": {
+        "nodeId": "N1",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N2",
+        "portIndex": 0
+      },
+      "label": "resti dove sei"
+    },
+    {
+      "id": "E2",
+      "from": {
+        "nodeId": "N1",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N3",
+        "portIndex": 0
+      },
+      "label": "nasconditi"
+    }
+  ]
+}

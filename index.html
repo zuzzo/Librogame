@@ -1,0 +1,1232 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Librogame Editor (box + collegamenti)</title>
+  <style>
+    :root{
+      --bg:#0b0f17;
+      --panel:#111827;
+      --panel2:#0f172a;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --border:#243046;
+      --accent:#60a5fa;
+      --danger:#fb7185;
+      --shadow:0 12px 30px rgba(0,0,0,.35);
+      --radius:14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);}
+    .topbar{
+      position:fixed; left:12px; right:12px; top:12px; z-index:50;
+      display:flex; gap:10px; align-items:center; padding:10px 12px;
+      background:linear-gradient(180deg, rgba(17,24,39,.92), rgba(15,23,42,.88));
+      border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .topbar .group{display:flex; gap:8px; align-items:center;}
+    button, input[type="file"]::file-selector-button{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button:hover, input[type="file"]::file-selector-button:hover{border-color:rgba(96,165,250,.7)}
+    .spacer{flex:1}
+    .badge{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:6px 10px;
+      background:rgba(255,255,255,.03);
+    }
+
+    #stageWrap{position:fixed; inset:0; overflow:hidden;}
+    #stage{
+      position:absolute; left:0; top:0; width:100%; height:100%;
+      transform-origin: 0 0;
+      user-select:none;
+    }
+    #grid{
+      position:absolute; inset:-2000px;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events:none;
+      opacity:.45;
+      z-index: 0;
+    }
+
+    /* FIX: edges above nodes */
+    #edges{
+      position:absolute; inset:0;
+      width:100%;
+      height:100%;
+      z-index: 20;
+      pointer-events:none; /* non blocca click sui box */
+      overflow: visible;
+    }
+    #nodes{
+      position:absolute; inset:0;
+      z-index: 10;
+    }
+
+    .edgePath{fill:none; stroke:rgba(96,165,250,.92); stroke-width:2.25;}
+    .edgePath.selected{stroke:rgba(251,113,133,.95); stroke-width:3.25;}
+    .edgePath.preview{stroke:rgba(251,113,133,.9); stroke-dasharray: 6 6;}
+    .edgeLabel{
+      font-family:var(--sans);
+      font-size:12px;
+      fill:rgba(229,231,235,.92);
+      paint-order: stroke;
+      stroke: rgba(11,15,23,.85);
+      stroke-width: 4px;
+      stroke-linejoin: round;
+      pointer-events:none;
+    }
+
+    .node{
+      position:absolute;
+      min-width: 260px;
+      background: var(--nodeBg, linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.92)));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      user-select:none;
+    }
+    .nodeHeader{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 10px 8px 10px;
+      border-bottom:1px solid rgba(36,48,70,.8);
+      cursor:grab;
+    }
+    .nodeHeader:active{cursor:grabbing}
+    .nodeTitle{flex:1; font-weight:800; letter-spacing:.2px; font-size:14px;}
+    .nodeTitle[contenteditable="true"]{
+      outline:none; border-radius:8px; padding:2px 6px; border:1px solid transparent;
+    }
+    .nodeTitle[contenteditable="true"]:focus{
+      border-color: rgba(96,165,250,.6);
+      background: rgba(255,255,255,.03);
+    }
+    .nodeBtns{display:flex; gap:6px; align-items:center;}
+    .iconBtn{
+      width:30px; height:30px; display:grid; place-items:center;
+      border-radius:10px; border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      cursor:pointer; color:var(--muted);
+    }
+    .iconBtn:hover{color:var(--text); border-color:rgba(96,165,250,.7)}
+    .iconBtn.danger:hover{border-color:rgba(251,113,133,.9); color:#fff}
+
+    .nodeBody{
+      padding:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .colorBar{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px 10px 10px;
+      border-bottom:1px solid rgba(36,48,70,.6);
+    }
+    .colorLabel{
+      font-size:11px;
+      letter-spacing:.6px;
+      color:var(--muted);
+    }
+    .colorSelect{
+      margin-left:auto;
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-radius:8px;
+      padding:4px 6px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .colorSelect option{
+      color:#0b0f17;
+    }
+    .col{
+      background: rgba(255,255,255,.02);
+      border:1px solid rgba(36,48,70,.7);
+      border-radius: 12px;
+      padding:10px;
+    }
+    .col h4{
+      margin:0 0 8px 0; font-size:12px; letter-spacing:.6px; color:var(--muted);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .tinyCtl{display:flex; gap:6px; align-items:center; font-family:var(--mono); font-size:12px; color:var(--muted);}
+    .tinyCtl button{padding:4px 8px; border-radius:8px; font-weight:800;}
+
+    .ports{display:flex; flex-direction:column; gap:8px;}
+    .port{display:flex; align-items:center; gap:8px;}
+    .port.out{justify-content:flex-end;}
+    .port.out .portLabel{margin-right:auto;}
+    .port.out .dot{margin-left:8px;}
+    .dot{
+      width:14px; height:14px; border-radius:999px;
+      background: rgba(96,165,250,.9);
+      border:2px solid rgba(11,15,23,.9);
+      box-shadow: 0 0 0 2px rgba(96,165,250,.25);
+      cursor:pointer;
+      flex:0 0 auto;
+    }
+    .dot.in{background: rgba(52,211,153,.9); box-shadow: 0 0 0 2px rgba(52,211,153,.22);}
+    .dot.out{background: rgba(96,165,250,.9);}
+    .dot.selected{outline:3px solid rgba(251,113,133,.85)}
+    .portLabel{font-family:var(--mono); font-size:12px; color:var(--text); opacity:.92; white-space:nowrap;}
+    .portMeta{margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--muted);}
+
+    /* NEW: chapter text */
+    .chapterWrap{
+      padding: 0 10px 10px 10px;
+      border-top: 1px solid rgba(36,48,70,.6);
+    }
+    .chapterWrap label{
+      display:block;
+      margin:10px 0 6px 0;
+      font-size:12px;
+      letter-spacing:.6px;
+      color:var(--muted);
+    }
+    textarea.chapterText{
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 90px;
+      resize: vertical;
+      border-radius: 12px;
+      border: 1px solid rgba(36,48,70,.7);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      padding: 10px;
+      font-family: var(--sans);
+      line-height: 1.3;
+      outline: none;
+    }
+    textarea.chapterText:focus{
+      border-color: rgba(96,165,250,.7);
+    }
+
+    .footerHelp{
+      position:fixed; left:12px; bottom:12px; z-index:40;
+      background:rgba(17,24,39,.88);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(8px);
+      max-width: 560px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .footerHelp code{font-family:var(--mono); color:var(--text); font-weight:700;}
+
+    .printToggle{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:6px 8px;
+      background: rgba(255,255,255,.03);
+    }
+
+    /* Simulazione */
+    .simOverlay{
+      position:fixed; inset:0; z-index:60;
+      background: rgba(11,15,23,.86);
+      backdrop-filter: blur(6px);
+      display:none;
+      overflow:auto;
+    }
+    .simPanel{
+      max-width: 720px;
+      margin: 60px auto;
+      background: #f8fafc;
+      color:#0b0f17;
+      border-radius: 14px;
+      padding: 18px 20px 20px 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      font-family: "Times New Roman", Times, serif;
+      max-height: 80vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .simTitle{
+      font-size:20px;
+      font-weight:800;
+      margin:0 0 12px 0;
+    }
+    .simBody{
+      font-size:15px;
+      line-height:1.55;
+      margin:0 0 18px 0;
+      white-space:pre-wrap;
+    }
+    .simChoices{
+      display:grid;
+      gap:8px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .simBtn{
+      text-align:left;
+      background:#111827;
+      color:#f8fafc;
+      border:none;
+      padding:10px 12px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .simClose{
+      float:right;
+      background:transparent;
+      border:1px solid #cbd5e1;
+      color:#0b0f17;
+      border-radius:10px;
+      padding:6px 10px;
+      cursor:pointer;
+      font-weight:700;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="group">
+      <button id="btnAdd">+ Nuovo capitolo</button>
+      <button id="btnCenter">Centra</button>
+    </div>
+    <div class="spacer"></div>
+    <div class="group">
+      <button id="btnExport">Esporta JSON</button>
+      <button id="btnPrint">Stampa</button>
+      <button id="btnSim">Simula</button>
+      <label class="printToggle">
+        <input id="chkShufflePrint" type="checkbox" checked />
+        Stampa in ordine casuale
+      </label>
+      <label style="display:flex; gap:8px; align-items:center;">
+        <input id="fileImport" type="file" accept="application/json" style="max-width:240px;color:var(--muted);" />
+      </label>
+    </div>
+    <div class="badge" id="status">Zoom 100%</div>
+  </div>
+
+  <div id="stageWrap">
+    <div id="stage">
+      <div id="grid"></div>
+
+      <svg id="edges">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(96,165,250,.92)"></path>
+          </marker>
+          <marker id="arrowPreview" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(251,113,133,.9)"></path>
+          </marker>
+        </defs>
+        <g id="edgesGroup"></g>
+        <g id="labelsGroup"></g>
+        <path id="previewPath" class="edgePath preview" marker-end="url(#arrowPreview)" d="" style="display:none;"></path>
+      </svg>
+
+      <div id="nodes"></div>
+    </div>
+  </div>
+
+  <div class="footerHelp">
+    <div><code>Drag box</code>: trascina l&rsquo;intestazione.</div>
+    <div><code>Pan</code>: trascina lo sfondo (mouse sinistro su area vuota). <code>Zoom</code>: rotellina.</div>
+    <div><code>Collega</code>: trascina da un punto <code>OUT</code> a un punto <code>IN</code> (o viceversa).</div>
+    <div><code>Etichetta</code>: dopo la creazione viene chiesto il testo; <code>doppio click</code> sulla freccia per modificarlo.</div>
+    <div><code>Escape</code>: annulla collegamento in corso.</div>
+  </div>
+
+  <div class="simOverlay" id="simOverlay">
+    <div class="simPanel">
+      <button class="simClose" id="simClose">Chiudi</button>
+      <h2 class="simTitle" id="simTitle"></h2>
+      <div class="simBody" id="simBody"></div>
+      <div class="simChoices" id="simChoices"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const state = {
+    nodes: new Map(),
+    edges: new Map(),
+    nextNodeId: 1,
+    nextEdgeId: 1,
+    scale: 1,
+    panX: 0,
+    panY: 0,
+    draggingNodeId: null,
+    dragCandidate: null,
+    dragOffset: {x:0, y:0},
+    panning: false,
+    panStart: {x:0, y:0},
+    panOrigin: {x:0, y:0},
+    linkFrom: null,
+    selectedEdgeId: null,
+    palette: [
+      '#111827', '#1f2937', '#0f172a', '#164e63',
+      '#0f766e', '#166534', '#3f6212', '#7c2d12',
+      '#7f1d1d', '#7c3aed', '#3730a3', '#1d4ed8',
+      '#0ea5e9', '#ca8a04', '#92400e', '#b91c1c'
+    ]
+  };
+
+  const stageWrap = document.getElementById('stageWrap');
+  const stage = document.getElementById('stage');
+  const nodesEl = document.getElementById('nodes');
+  const edgesGroup = document.getElementById('edgesGroup');
+  const labelsGroup = document.getElementById('labelsGroup');
+  const previewPath = document.getElementById('previewPath');
+
+  const btnAdd = document.getElementById('btnAdd');
+  const btnCenter = document.getElementById('btnCenter');
+  const btnExport = document.getElementById('btnExport');
+  const btnPrint = document.getElementById('btnPrint');
+  const btnSim = document.getElementById('btnSim');
+  const chkShufflePrint = document.getElementById('chkShufflePrint');
+  const fileImport = document.getElementById('fileImport');
+  const status = document.getElementById('status');
+
+  const simOverlay = document.getElementById('simOverlay');
+  const simClose = document.getElementById('simClose');
+  const simTitle = document.getElementById('simTitle');
+  const simBody = document.getElementById('simBody');
+  const simChoices = document.getElementById('simChoices');
+
+  function setTransform() {
+    stage.style.transform = `translate(${state.panX}px, ${state.panY}px) scale(${state.scale})`;
+    status.textContent = `Zoom ${Math.round(state.scale * 100)}%`;
+    redrawAllEdges();
+  }
+
+  function openHandleDb() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('librogame_fs', 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('handles')) db.createObjectStore('handles');
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function idbGetHandle(key) {
+    try {
+      const db = await openHandleDb();
+      return await new Promise((resolve) => {
+        const tx = db.transaction('handles', 'readonly');
+        const store = tx.objectStore('handles');
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  async function idbSetHandle(key, value) {
+    try {
+      const db = await openHandleDb();
+      return await new Promise((resolve) => {
+        const tx = db.transaction('handles', 'readwrite');
+        const store = tx.objectStore('handles');
+        store.put(value, key);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      });
+    } catch {
+      return false;
+    }
+  }
+
+  function screenToWorld(clientX, clientY) {
+    const rect = stageWrap.getBoundingClientRect();
+    const sx = clientX - rect.left;
+    const sy = clientY - rect.top;
+    return {x: (sx - state.panX) / state.scale, y: (sy - state.panY) / state.scale};
+  }
+
+  function worldToScreen(wx, wy) {
+    return {x: wx * state.scale + state.panX, y: wy * state.scale + state.panY};
+  }
+
+  function makeNode({x, y, title, inputs=1, outputs=2, content="", colorIndex=0}={}) {
+    const id = `N${state.nextNodeId++}`;
+    const node = { id, title: title ?? `Capitolo ${id}`, x: x ?? 200, y: y ?? 140, inputs, outputs, content, colorIndex };
+    state.nodes.set(id, node);
+    renderNode(node);
+    redrawAllEdges();
+    return node;
+  }
+
+  function renderNode(node) {
+    let el = document.getElementById(node.id);
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'node';
+      el.id = node.id;
+
+      el.innerHTML = `
+        <div class="nodeHeader">
+          <div class="nodeTitle" contenteditable="false"></div>
+          <div class="nodeBtns">
+            <div class="iconBtn" title="Duplica" data-action="dup">&#x29C9;</div>
+            <div class="iconBtn danger" title="Elimina" data-action="del">&#x2715;</div>
+          </div>
+        </div>
+
+        <div class="colorBar">
+          <div class="colorLabel">COLORE</div>
+          <select class="colorSelect" data-color-select="true"></select>
+        </div>
+
+        <div class="nodeBody">
+          <div class="col">
+            <h4>
+              INPUT
+              <span class="tinyCtl">
+                <button data-action="in-">-</button>
+                <span data-bind="inCount"></span>
+                <button data-action="in+">+</button>
+              </span>
+            </h4>
+            <div class="ports" data-ports="in"></div>
+          </div>
+
+          <div class="col">
+            <h4>
+              OUTPUT
+              <span class="tinyCtl">
+                <button data-action="out-">-</button>
+                <span data-bind="outCount"></span>
+                <button data-action="out+">+</button>
+              </span>
+            </h4>
+            <div class="ports" data-ports="out"></div>
+          </div>
+        </div>
+
+        <div class="chapterWrap">
+          <label>Testo capitolo</label>
+          <textarea class="chapterText" placeholder="Scrivi qui il contenuto del capitolo..."></textarea>
+        </div>
+      `;
+
+      nodesEl.appendChild(el);
+
+      const header = el.querySelector('.nodeHeader');
+      header.addEventListener('pointerdown', (ev) => {
+        const target = ev.target;
+        if (target.closest('.iconBtn')) return;
+        if (target.classList.contains('chapterText')) return;
+        if (!target.classList.contains('nodeTitle')) {
+          ev.preventDefault();
+        }
+        const w = screenToWorld(ev.clientX, ev.clientY);
+        state.dragCandidate = {
+          nodeId: node.id,
+          startClientX: ev.clientX,
+          startClientY: ev.clientY,
+          offsetX: w.x - node.x,
+          offsetY: w.y - node.y
+        };
+      });
+
+      const titleEl = el.querySelector('.nodeTitle');
+      titleEl.addEventListener('dblclick', (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        state.draggingNodeId = null;
+        state.dragCandidate = null;
+        titleEl.setAttribute('contenteditable', 'true');
+        titleEl.focus();
+        const r = document.createRange();
+        r.selectNodeContents(titleEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+      });
+      titleEl.addEventListener('blur', () => {
+        titleEl.setAttribute('contenteditable', 'false');
+      });
+      titleEl.addEventListener('input', () => {
+        const n = state.nodes.get(node.id);
+        if (!n) return;
+        n.title = titleEl.textContent.trim() || n.title;
+      });
+
+      const textEl = el.querySelector('textarea.chapterText');
+      textEl.addEventListener('input', () => {
+        const n = state.nodes.get(node.id);
+        if (!n) return;
+        n.content = textEl.value;
+      });
+
+      el.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        if (action === 'del') deleteNode(node.id);
+        else if (action === 'dup') {
+          const n = state.nodes.get(node.id);
+          makeNode({x:n.x+40, y:n.y+40, title:n.title + ' (copia)', inputs:n.inputs, outputs:n.outputs, content:n.content, colorIndex:n.colorIndex});
+        } else if (action === 'in+') updatePorts(node.id, 'in', +1);
+        else if (action === 'in-') updatePorts(node.id, 'in', -1);
+        else if (action === 'out+') updatePorts(node.id, 'out', +1);
+        else if (action === 'out-') updatePorts(node.id, 'out', -1);
+      });
+    }
+
+    el.style.left = `${node.x}px`;
+    el.style.top  = `${node.y}px`;
+    const color = state.palette[node.colorIndex] || state.palette[0];
+    el.style.setProperty('--nodeBg', color);
+
+    el.querySelector('.nodeTitle').textContent = node.title;
+    el.querySelector('[data-bind="inCount"]').textContent = String(node.inputs);
+    el.querySelector('[data-bind="outCount"]').textContent = String(node.outputs);
+    el.querySelector('textarea.chapterText').value = node.content || "";
+
+    const colorSelect = el.querySelector('[data-color-select="true"]');
+    const inPortsEl = el.querySelector('[data-ports="in"]');
+    const outPortsEl = el.querySelector('[data-ports="out"]');
+
+    colorSelect.innerHTML = '';
+    state.palette.forEach((c, idx) => {
+      const opt = document.createElement('option');
+      opt.value = String(idx);
+      opt.textContent = `Colore ${idx + 1}`;
+      opt.style.background = c;
+      colorSelect.appendChild(opt);
+    });
+    colorSelect.value = String(node.colorIndex);
+    colorSelect.onchange = () => {
+      const n = state.nodes.get(node.id);
+      if (!n) return;
+      n.colorIndex = Number(colorSelect.value) || 0;
+      renderNode(n);
+    };
+
+    inPortsEl.innerHTML = '';
+    for (let i=0; i<node.inputs; i++) inPortsEl.appendChild(portRow(node.id, 'in', i));
+
+    outPortsEl.innerHTML = '';
+    for (let i=0; i<node.outputs; i++) outPortsEl.appendChild(portRow(node.id, 'out', i));
+  }
+
+  function portRow(nodeId, kind, index) {
+    const row = document.createElement('div');
+    row.className = `port ${kind}`;
+
+    const dot = document.createElement('div');
+    dot.className = `dot ${kind}`;
+    dot.dataset.nodeId = nodeId;
+    dot.dataset.kind = kind;
+    dot.dataset.index = String(index);
+
+    dot.addEventListener('pointerdown', (ev) => {
+      ev.stopPropagation();
+      const nId = dot.dataset.nodeId;
+      const k = dot.dataset.kind;
+      const idx = Number(dot.dataset.index);
+      state.linkFrom = {nodeId: nId, portIndex: idx, kind: k};
+      clearSelectedDots();
+      dot.classList.add('selected');
+      previewPath.style.display = 'block';
+      redrawPreview(ev.clientX, ev.clientY);
+    });
+
+    dot.addEventListener('pointerup', (ev) => {
+      if (!state.linkFrom) return;
+      const nId = dot.dataset.nodeId;
+      const k = dot.dataset.kind;
+      const idx = Number(dot.dataset.index);
+      const from = state.linkFrom;
+      if (from.nodeId === nId && from.portIndex === idx) return;
+      if ((from.kind === 'out' && k === 'in') || (from.kind === 'in' && k === 'out')) {
+        if (from.kind === 'out') createEdge(from.nodeId, from.portIndex, nId, idx);
+        else createEdge(nId, idx, from.nodeId, from.portIndex);
+      }
+      state.linkFrom = null;
+      clearSelectedDots();
+      previewPath.style.display = 'none';
+    });
+
+    const label = document.createElement('div');
+    label.className = 'portLabel';
+    label.textContent = `${kind.toUpperCase()} ${index+1}`;
+
+    const meta = document.createElement('div');
+    meta.className = 'portMeta';
+    meta.textContent = (kind === 'in') ? '\u25CF' : '\u2192';
+
+    if (kind === 'out') {
+      row.appendChild(label);
+      row.appendChild(meta);
+      row.appendChild(dot);
+    } else {
+      row.appendChild(dot);
+      row.appendChild(label);
+      row.appendChild(meta);
+    }
+    return row;
+  }
+
+  function clearSelectedDots() {
+    document.querySelectorAll('.dot.selected').forEach(d => d.classList.remove('selected'));
+  }
+
+  function updatePorts(nodeId, kind, delta) {
+    const node = state.nodes.get(nodeId);
+    if (!node) return;
+
+    if (kind === 'in') {
+      node.inputs = Math.max(0, node.inputs + delta);
+      for (const [eid, e] of state.edges) {
+        if (e.to.nodeId === nodeId && e.to.portIndex >= node.inputs) state.edges.delete(eid);
+      }
+    } else {
+      node.outputs = Math.max(0, node.outputs + delta);
+      for (const [eid, e] of state.edges) {
+        if (e.from.nodeId === nodeId && e.from.portIndex >= node.outputs) state.edges.delete(eid);
+      }
+    }
+    renderNode(node);
+    redrawAllEdges();
+  }
+
+  function deleteNode(nodeId) {
+    for (const [eid, e] of state.edges) {
+      if (e.from.nodeId === nodeId || e.to.nodeId === nodeId) state.edges.delete(eid);
+    }
+    state.nodes.delete(nodeId);
+    document.getElementById(nodeId)?.remove();
+    redrawAllEdges();
+  }
+
+  function createEdge(fromNodeId, fromPortIndex, toNodeId, toPortIndex) {
+    for (const e of state.edges.values()) {
+      if (e.from.nodeId===fromNodeId && e.from.portIndex===fromPortIndex &&
+          e.to.nodeId===toNodeId && e.to.portIndex===toPortIndex) return;
+    }
+    const id = `E${state.nextEdgeId++}`;
+    const label = prompt('Testo del passaggio (etichetta collegamento):', 'vai a ...') ?? '';
+    state.edges.set(id, {id, from:{nodeId:fromNodeId, portIndex:fromPortIndex}, to:{nodeId:toNodeId, portIndex:toPortIndex}, label:label.trim()});
+    redrawAllEdges();
+  }
+
+  function getPortWorldPos(nodeId, kind, index) {
+    const nodeEl = document.getElementById(nodeId);
+    if (!nodeEl) return null;
+    const dot = nodeEl.querySelector(`.dot.${kind}[data-index="${index}"]`);
+    if (!dot) return null;
+    const r = dot.getBoundingClientRect();
+    const cx = r.left + r.width/2;
+    const cy = r.top + r.height/2;
+    return screenToWorld(cx, cy);
+  }
+
+  function bezierPath(a, b) {
+    const dx = Math.max(40, Math.abs(b.x - a.x) * 0.45);
+    const c1 = {x: a.x + dx, y: a.y};
+    const c2 = {x: b.x - dx, y: b.y};
+    return `M ${a.x} ${a.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${b.x} ${b.y}`;
+  }
+
+  function cubicPoint(p0, p1, p2, p3, t) {
+    const u = 1 - t;
+    const tt = t*t, uu = u*u;
+    const uuu = uu*u, ttt = tt*t;
+    return {
+      x: uuu*p0.x + 3*uu*t*p1.x + 3*u*tt*p2.x + ttt*p3.x,
+      y: uuu*p0.y + 3*uu*t*p1.y + 3*u*tt*p2.y + ttt*p3.y
+    };
+  }
+
+  function redrawAllEdges() {
+    edgesGroup.innerHTML = '';
+    labelsGroup.innerHTML = '';
+
+    for (const edge of state.edges.values()) {
+      const a = getPortWorldPos(edge.from.nodeId, 'out', edge.from.portIndex);
+      const b = getPortWorldPos(edge.to.nodeId, 'in', edge.to.portIndex);
+      if (!a || !b) continue;
+
+      const pathD = bezierPath(a, b);
+
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', pathD);
+      p.setAttribute('class', 'edgePath');
+      p.setAttribute('marker-end', 'url(#arrow)');
+      if (state.selectedEdgeId === edge.id) p.classList.add('selected');
+
+      // IMPORTANT: edges above nodes, but only clickable on stroke
+      p.style.pointerEvents = 'stroke';
+      p.style.cursor = 'text';
+      p.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        state.selectedEdgeId = edge.id;
+        redrawAllEdges();
+      });
+      p.addEventListener('dblclick', () => {
+        const next = prompt('Modifica etichetta (vuoto = elimina collegamento):', edge.label);
+        if (next === null) return;
+        const trimmed = (next || '').trim();
+        if (!trimmed) {
+          state.edges.delete(edge.id);
+          if (state.selectedEdgeId === edge.id) state.selectedEdgeId = null;
+        } else {
+          edge.label = trimmed;
+        }
+        redrawAllEdges();
+      });
+
+      edgesGroup.appendChild(p);
+
+      if (edge.label) {
+        const dx = Math.max(40, Math.abs(b.x - a.x) * 0.45);
+        const c1 = {x: a.x + dx, y: a.y};
+        const c2 = {x: b.x - dx, y: b.y};
+        const pt = cubicPoint(a, c1, c2, b, 0.5);
+
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('class', 'edgeLabel');
+        txt.setAttribute('x', pt.x);
+        txt.setAttribute('y', pt.y - 8);
+        txt.setAttribute('text-anchor', 'middle');
+        txt.textContent = edge.label;
+        labelsGroup.appendChild(txt);
+      }
+    }
+  }
+
+  function redrawPreview(clientX, clientY) {
+    if (!state.linkFrom) return;
+    const a = getPortWorldPos(state.linkFrom.nodeId, state.linkFrom.kind, state.linkFrom.portIndex);
+    if (!a) return;
+    const b = screenToWorld(clientX, clientY);
+    previewPath.setAttribute('d', bezierPath(a, b));
+  }
+
+  window.addEventListener('pointermove', (ev) => {
+    if (state.dragCandidate && !state.draggingNodeId) {
+      const dx = ev.clientX - state.dragCandidate.startClientX;
+      const dy = ev.clientY - state.dragCandidate.startClientY;
+      if ((dx*dx + dy*dy) > 16) {
+        state.draggingNodeId = state.dragCandidate.nodeId;
+        state.dragOffset.x = state.dragCandidate.offsetX;
+        state.dragOffset.y = state.dragCandidate.offsetY;
+      }
+    }
+    if (state.draggingNodeId) {
+      const w = screenToWorld(ev.clientX, ev.clientY);
+      const n = state.nodes.get(state.draggingNodeId);
+      if (!n) return;
+      n.x = w.x - state.dragOffset.x;
+      n.y = w.y - state.dragOffset.y;
+      renderNode(n);
+      redrawAllEdges();
+      return;
+    }
+    if (state.panning) {
+      const dx = ev.clientX - state.panStart.x;
+      const dy = ev.clientY - state.panStart.y;
+      state.panX = state.panOrigin.x + dx;
+      state.panY = state.panOrigin.y + dy;
+      setTransform();
+      return;
+    }
+    if (state.linkFrom) redrawPreview(ev.clientX, ev.clientY);
+  });
+
+  window.addEventListener('pointerup', () => {
+    state.draggingNodeId = null;
+    state.dragCandidate = null;
+    state.panning = false;
+    if (state.linkFrom) {
+      state.linkFrom = null;
+      clearSelectedDots();
+      previewPath.style.display = 'none';
+    }
+  });
+
+  stageWrap.addEventListener('contextmenu', (ev) => {
+    ev.preventDefault();
+  });
+
+  stageWrap.addEventListener('pointerdown', (ev) => {
+    if (ev.target.closest('path.edgePath')) return;
+    state.selectedEdgeId = null;
+    if (ev.target.closest('.node')) return;
+    ev.preventDefault();
+    state.panning = true;
+    state.panStart = {x: ev.clientX, y: ev.clientY};
+    state.panOrigin = {x: state.panX, y: state.panY};
+  });
+
+  stageWrap.addEventListener('wheel', (ev) => {
+    const el = ev.target;
+    const isEditable = el instanceof HTMLElement &&
+      (el.tagName === 'TEXTAREA' ||
+       el.tagName === 'INPUT' ||
+       el.tagName === 'SELECT' ||
+       el.isContentEditable ||
+       el.closest('[contenteditable="true"]'));
+    if (isEditable) return;
+    ev.preventDefault();
+    const zoomIntensity = 0.0016;
+    const delta = -ev.deltaY;
+    const factor = Math.exp(delta * zoomIntensity);
+
+    const mouse = screenToWorld(ev.clientX, ev.clientY);
+    let nextScale = state.scale * factor;
+    nextScale = Math.min(2.2, Math.max(0.10, nextScale));
+    const before = worldToScreen(mouse.x, mouse.y);
+
+    state.scale = nextScale;
+    setTransform();
+
+    const after = worldToScreen(mouse.x, mouse.y);
+    state.panX += (before.x - after.x);
+    state.panY += (before.y - after.y);
+    setTransform();
+  }, {passive:false});
+
+  window.addEventListener('keydown', (ev) => {
+    if ((ev.key === 'Delete' || ev.key === 'Backspace') && state.selectedEdgeId) {
+      state.edges.delete(state.selectedEdgeId);
+      state.selectedEdgeId = null;
+      redrawAllEdges();
+    }
+    if (ev.key === 'Escape') {
+      state.linkFrom = null;
+      clearSelectedDots();
+      previewPath.style.display = 'none';
+    }
+  });
+
+  btnAdd.addEventListener('click', () => {
+    const rect = stageWrap.getBoundingClientRect();
+    const centerWorld = screenToWorld(rect.left + rect.width/2, rect.top + rect.height/2);
+    makeNode({x:centerWorld.x - 140, y:centerWorld.y - 80});
+  });
+
+  btnCenter.addEventListener('click', () => centerView());
+
+  function centerView() {
+    if (state.nodes.size === 0) {
+      state.panX = 0; state.panY = 0; state.scale = 1;
+      setTransform(); return;
+    }
+    let minX=Infinity, minY=Infinity, maxX=-Infinity, maxY=-Infinity;
+    for (const n of state.nodes.values()) {
+      minX = Math.min(minX, n.x);
+      minY = Math.min(minY, n.y);
+      maxX = Math.max(maxX, n.x + 320);
+      maxY = Math.max(maxY, n.y + 320);
+    }
+    const rect = stageWrap.getBoundingClientRect();
+    const boxW = (maxX - minX), boxH = (maxY - minY);
+    const sX = rect.width / (boxW + 200);
+    const sY = rect.height / (boxH + 200);
+    state.scale = Math.min(1.4, Math.max(0.5, Math.min(sX, sY)));
+    state.panX = (rect.width/2) - ((minX + boxW/2) * state.scale);
+    state.panY = (rect.height/2) - ((minY + boxH/2) * state.scale);
+    setTransform();
+  }
+
+  async function saveAsJson() {
+    const data = serialize();
+    const json = JSON.stringify(data, null, 2);
+    if ('showSaveFilePicker' in window) {
+      try {
+        const lastHandle = await idbGetHandle('lastSaveHandle');
+        const pickerOptions = {
+          suggestedName: 'librogame_project.json',
+          types: [{description: 'JSON', accept: {'application/json': ['.json']}}]
+        };
+        if (lastHandle) pickerOptions.startIn = lastHandle;
+        const handle = await window.showSaveFilePicker(pickerOptions);
+        await idbSetHandle('lastSaveHandle', handle);
+        const writable = await handle.createWritable();
+        await writable.write(json);
+        await writable.close();
+        return;
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        alert('Salvataggio non riuscito, userò il download tradizionale.');
+      }
+    }
+    const blob = new Blob([json], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'librogame_project.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  btnExport.addEventListener('click', () => { saveAsJson(); });
+  btnPrint.addEventListener('click', () => { printStory(); });
+  btnSim.addEventListener('click', () => { startSimulation(); });
+  simClose.addEventListener('click', () => { simOverlay.style.display = 'none'; });
+  simOverlay.addEventListener('click', (ev) => {
+    if (ev.target === simOverlay) simOverlay.style.display = 'none';
+  });
+  simOverlay.addEventListener('wheel', (ev) => { ev.stopPropagation(); }, {passive:true});
+  simOverlay.addEventListener('touchmove', (ev) => { ev.stopPropagation(); }, {passive:true});
+
+  fileImport.addEventListener('change', async () => {
+    const f = fileImport.files?.[0];
+    if (!f) return;
+    const text = await f.text();
+    try { load(JSON.parse(text)); fileImport.value=''; }
+    catch { alert('JSON non valido.'); }
+  });
+
+  function serialize() {
+    return {
+      version: 1,
+      viewport: {scale: state.scale, panX: state.panX, panY: state.panY},
+      nextNodeId: state.nextNodeId,
+      nextEdgeId: state.nextEdgeId,
+      nodes: Array.from(state.nodes.values()),
+      edges: Array.from(state.edges.values())
+    };
+  }
+
+  function load(data) {
+    state.nodes.clear();
+    state.edges.clear();
+    nodesEl.innerHTML = '';
+    edgesGroup.innerHTML = '';
+    labelsGroup.innerHTML = '';
+    previewPath.style.display = 'none';
+    state.linkFrom = null;
+    state.selectedEdgeId = null;
+
+    state.nextNodeId = Number(data.nextNodeId || 1);
+    state.nextEdgeId = Number(data.nextEdgeId || 1);
+
+    const vp = data.viewport || {};
+    state.scale = Number(vp.scale || 1);
+    state.panX  = Number(vp.panX  || 0);
+    state.panY  = Number(vp.panY  || 0);
+
+    for (const n of (data.nodes || [])) {
+      state.nodes.set(n.id, {
+        id: n.id,
+        title: n.title ?? n.id,
+        x: Number(n.x || 0),
+        y: Number(n.y || 0),
+        inputs: Number(n.inputs || 0),
+        outputs: Number(n.outputs || 0),
+        content: (n.content || '').toString(),
+        colorIndex: Number.isFinite(n.colorIndex) ? Number(n.colorIndex) : 0
+      });
+    }
+    for (const e of (data.edges || [])) {
+      state.edges.set(e.id, {
+        id: e.id,
+        from: {nodeId: e.from.nodeId, portIndex: Number(e.from.portIndex)},
+        to: {nodeId: e.to.nodeId, portIndex: Number(e.to.portIndex)},
+        label: (e.label || '').toString()
+      });
+    }
+
+    for (const n of state.nodes.values()) renderNode(n);
+    setTransform();
+    redrawAllEdges();
+  }
+
+  // init
+  makeNode({x:180, y:160, title:'Inizio', inputs:0, outputs:2, content:'Sei davanti a una porta...'});
+  makeNode({x:560, y:260, title:'Capitolo 1', inputs:1, outputs:2, content:'Scegli se entrare o fuggire.'});
+  centerView();
+
+  function printStory() {
+    if (state.nodes.size === 0) return;
+
+    const nodes = Array.from(state.nodes.values());
+    const startNode = pickStartNode(nodes);
+    const rest = nodes.filter(n => n.id !== startNode.id);
+    const orderedRest = chkShufflePrint && chkShufflePrint.checked ? shuffle(rest) : rest;
+
+    const ordered = [startNode, ...orderedRest];
+    const idToNum = new Map();
+    ordered.forEach((n, i) => idToNum.set(n.id, i + 1));
+
+    const edgesByFrom = new Map();
+    for (const e of state.edges.values()) {
+      if (!edgesByFrom.has(e.from.nodeId)) edgesByFrom.set(e.from.nodeId, []);
+      edgesByFrom.get(e.from.nodeId).push(e);
+    }
+
+    const html = buildPrintHtml(ordered, idToNum, edgesByFrom);
+    const frame = document.createElement('iframe');
+    frame.style.position = 'fixed';
+    frame.style.right = '0';
+    frame.style.bottom = '0';
+    frame.style.width = '0';
+    frame.style.height = '0';
+    frame.style.border = '0';
+    frame.style.visibility = 'hidden';
+    document.body.appendChild(frame);
+    const doc = frame.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+    frame.onload = () => {
+      frame.contentWindow.focus();
+      frame.contentWindow.print();
+      setTimeout(() => frame.remove(), 500);
+    };
+  }
+
+  function startSimulation() {
+    if (state.nodes.size === 0) return;
+    const nodes = Array.from(state.nodes.values());
+    const startNode = pickStartNode(nodes);
+    renderSimNode(startNode.id);
+    simOverlay.style.display = 'block';
+  }
+
+  function renderSimNode(nodeId) {
+    const node = state.nodes.get(nodeId);
+    if (!node) return;
+    simTitle.textContent = node.title || '';
+    simBody.textContent = node.content || '';
+
+    simChoices.innerHTML = '';
+    const outgoing = Array.from(state.edges.values()).filter(e => e.from.nodeId === nodeId);
+    if (outgoing.length === 0) {
+      const end = document.createElement('div');
+      end.textContent = 'Fine.';
+      simChoices.appendChild(end);
+      return;
+    }
+    outgoing.forEach((e) => {
+      const target = state.nodes.get(e.to.nodeId);
+      const label = (e.label && e.label.trim()) ? e.label.trim() : 'Vai avanti';
+      const btn = document.createElement('button');
+      btn.className = 'simBtn';
+      btn.textContent = `${label} → ${target ? (target.title || e.to.nodeId) : e.to.nodeId}`;
+      btn.addEventListener('click', () => renderSimNode(e.to.nodeId));
+      simChoices.appendChild(btn);
+    });
+  }
+
+  function pickStartNode(nodes) {
+    const byTitle = nodes.find(n => (n.title || '').trim().toLowerCase() === 'inizio');
+    if (byTitle) return byTitle;
+    const byOne = nodes.find(n => (n.title || '').trim() === '1');
+    if (byOne) return byOne;
+    return nodes.slice().sort((a, b) => extractNum(a.id) - extractNum(b.id))[0];
+  }
+
+  function extractNum(id) {
+    const m = String(id).match(/\d+/);
+    return m ? Number(m[0]) : 0;
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function buildPrintHtml(ordered, idToNum, edgesByFrom) {
+    const items = ordered.map((n, idx) => {
+      const num = idx + 1;
+      const title = escapeHtml(n.title || '');
+      const body = escapeHtml(n.content || '').replace(/\n/g, '<br>');
+      const edges = edgesByFrom.get(n.id) || [];
+      const choices = edges.map((e) => {
+        const target = idToNum.get(e.to.nodeId);
+        const label = escapeHtml(e.label || 'Vai al capitolo');
+        return `<li>${label}: vai al capitolo <strong>${target}</strong></li>`;
+      }).join('');
+      return `
+        <section class="chapter">
+          <h2>Capitolo ${num}: ${title}</h2>
+          <div class="content">${body || '&nbsp;'}</div>
+          <ul class="choices">${choices}</ul>
+        </section>
+      `;
+    }).join('');
+
+    return `
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <title>Librogame - Stampa</title>
+  <style>
+    :root{ --text:#111; --muted:#444; }
+    html,body{ margin:0; padding:0; font-family: "Times New Roman", Times, serif; color:var(--text); }
+    .wrap{ max-width: 800px; margin: 24px auto; padding: 0 24px; }
+    h1{ font-size:22px; margin:0 0 18px 0; }
+    .chapter{ page-break-inside: avoid; margin: 0 0 18px 0; }
+    .chapter h2{ font-size:18px; margin: 14px 0 6px 0; }
+    .content{ font-size:14px; line-height:1.45; margin-bottom: 8px; }
+    .choices{ margin: 0 0 10px 18px; padding:0; font-size:14px; color:var(--muted); }
+    @media print {
+      .wrap{ margin: 0; max-width: none; }
+      .chapter{ page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Librogame (ordine rimescolato, Inizio = Capitolo 1)</h1>
+    ${items}
+  </div>
+</body>
+</html>`;
+  }
+})();
+</script>
+</body>
+</html>
