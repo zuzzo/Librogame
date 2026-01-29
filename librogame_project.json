@@ -1,12 +1,12 @@
 {
   "version": 1,
   "viewport": {
-    "scale": 0.3225353166867706,
-    "panX": -162.85252560423135,
-    "panY": 275.56597721824244
+    "scale": 1.5975278815621223,
+    "panX": -6090.375012872932,
+    "panY": -819.3249757779099
   },
-  "nextNodeId": 18,
-  "nextEdgeId": 27,
+  "nextNodeId": 22,
+  "nextEdgeId": 35,
   "nodes": [
     {
       "id": "N1",
@@ -115,7 +115,7 @@
       "y": 144.77581950293725,
       "inputs": 1,
       "outputs": 1,
-      "content": "Caro diario.\n\noggi 10 ottobre 1938 è il mio compleanno, i miei genitori mi hanno regalato un quaderno rilegato in pelle.\n\"Scrivici quello che vuoi. Noi non lo leggeremo\" mi hanno detto.\nCosì ho deciso che tu sarai il mio amico di penna.\nNon posso più uscire di casa, e non vedo più nessuno.\nOra sei tu il mio amico.\n\nTi porterò sempre con me.",
+      "content": "Caro diario.\n\noggi 10 ottobre 1938 è il mio compleanno, i miei genitori mi hanno regalato un quaderno rilegato in pelle.\n\"Scrivici quello che vuoi. Noi non lo leggeremo\" mi hanno detto.\nCosì ho deciso che tu sarai il mio amico di penna.\nNon posso più andare a scuola, i miei compagni non li vedo più.\nOra sei tu il mio amico.\n\nTi porterò sempre con me.",
       "colorIndex": 9
     },
     {
@@ -155,14 +155,14 @@
       "y": 801.8722344135747,
       "inputs": 1,
       "outputs": 2,
-      "content": "Caro diario,\n\nquesta mattina è venuta la signora Rosa. Prima lavorava da noi tutti i giorni. Mi preparava la merenda e mi sgridava quando lasciavo i libri in giro. Ora non viene più spesso, ma la mamma dice che ci aiuta ancora.\n\nHa portato una borsa con dentro pane, uova e un po’ di verdura. La mamma l’ha fatta entrare in cucina e hanno parlato piano, come fanno quando non vogliono farsi sentire.\n\nLa mamma le ha dato dei soldi e poi un foglietto con la lista della spesa per la prossima settimana. La signora Rosa l’ha presa e ha detto che farà il possibile.\n\nPrima di andare via mi ha accarezzato la testa e ha detto che sono cresciuto. Io ho pensato che non è vero, ma non gliel’ho detto.",
+      "content": "Caro diario,\n\nquesta mattina è venuta la signora Rosa. Prima lavorava da noi tutti i giorni. Mi preparava la merenda e mi sgridava quando inseguivo Tigre in soggiorno. Ora non viene più spesso, ma la mamma dice che ci aiuta ancora.\n\nHa portato una borsa con dentro pane, uova e un po’ di verdura. La mamma l’ha fatta entrare in cucina e hanno parlato piano, come fanno quando non vogliono farsi sentire.\n\nLa mamma le ha dato dei soldi e poi un foglietto con la lista della spesa per la prossima settimana. La signora Rosa l’ha presa e ha detto che farà il possibile.\n\nPrima di andare via mi ha accarezzato la testa e ha detto che sono cresciuto. Io ho pensato che non è vero, ma non gliel’ho detto.",
       "colorIndex": 0
     },
     {
       "id": "N16",
       "title": "Novembre 1938 – La scatola",
-      "x": 3100.189739526894,
-      "y": -180.13485253222007,
+      "x": 4057.116527818735,
+      "y": -220.36699160710106,
       "inputs": 1,
       "outputs": 2,
       "content": "Caro diario,\n\noggi papà ha ricevuto una scatola. Gliel’ha portata un suo collega dell’università. Non è entrato, l’ha lasciata sull’ingresso e ha salutato in fretta.\n\nDentro c’erano le cose di papà: libri, quaderni, alcune penne e una fotografia che teneva sulla scrivania. Papà le ha sistemate in silenzio.\n\nHa detto che all’università hanno dovuto fare spazio e che non può più lasciare lì le sue cose.\n\nIo ho guardato la scatola vuota. Mi sembrava troppo piccola per contenere tutto il lavoro di papà.\n\nLui l’ha chiusa e l’ha messa nell’armadio.",
@@ -176,6 +176,46 @@
       "inputs": 1,
       "outputs": 2,
       "content": "Caro diario,\n\nin casa c’è anche Tigre. È il nostro gatto. È tigrato e non è di razza, ma è nostro.\n\nDi solito dorme sulla sedia vicino alla stufa o sul letto di Anna. Quando papà è a casa, gli sale sulle ginocchia mentre legge.\n\nIn questi giorni Tigre gira di più per casa e miagola davanti alle porte chiuse. La mamma dice che sente il freddo, ma secondo me sente qualcos’altro.\n\nIo lo accarezzo e lui fa le fusa, è l'unico amico che mi è rimasto a parte Anna e te.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N18",
+      "title": "Primi di novembre 1938 - Al parco",
+      "x": 4313.097445260729,
+      "y": 449.65885034085744,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\noggi siamo usciti. Al mattino faceva freddo, ma poi è spuntato dalle nuvole un sole caldo e siamo andati al parco a fare una passeggiata.\n\nHo incontrato Giulio, un mio compagno di classe. Mi ha raccontato come stanno andando le lezioni e mi ha chiesto perché non vado più a scuola. Io non ho saputo cosa rispondere.\n\nMi ha fatto piacere rivederlo. Abbiamo parlato ancora un po’, poi è arrivata sua mamma. Lo ha preso per mano e lo ha portato via senza dire niente.\n\nIo sono rimasto lì a guardare le foglie per terra. Poi ho raggiunto i miei.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N19",
+      "title": "Novembre 1938 – Il pianerottolo",
+      "x": 3452.186848294754,
+      "y": 231.41539970596355,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\noggi Tigre è scappato.\n\nLa porta di casa era socchiusa e lui è uscito senza farsi vedere. Ho sentito la mamma chiamarlo, ma non rispondeva. Allora sono uscito sul pianerottolo.\n\nL’ho visto infilarsi sotto la porta dei vicini.\n\nLì abita una signora anziana, con suo figlio. Lui non esce quasi mai. A volte lo sento muoversi di notte, quando tutto il palazzo è silenzioso.\n\nHo bussato piano.\n\nLa signora ha aperto dopo un po’. Mi ha guardato, poi ha guardato il gatto che spuntava da dietro la porta. Ha sorriso.\n\n«È entrato da solo» ha detto.\n\nMi ha fatto entrare.\n\nIn casa c’era odore di latte caldo. Il figlio era in camera, disteso sul letto. Le gambe erano coperte da una coperta anche se non faceva freddo. Tigre si era infilato sotto il letto e non voleva più uscire.\n\nLa signora si è chinata con fatica e ha chiamato il gatto. Lui è uscito piano, come se non fosse sicuro.\n\nPoi mi ha fatto sedere al tavolo e mi ha dato una tazza di cioccolata. Era calda. Ho tenuto la tazza con tutte e due le mani.\n\nIl ragazzo mi guardava dalla stanza. Non parlava. Io non sapevo cosa dire.\n\nDopo un po’ è arrivata la mamma. Ha ringraziato la signora, ha preso Tigre in braccio e lo ha stretto contro il cappotto.\n\nPrima di uscire, la signora mi ha detto che Tigre può tornare quando vuole.\n\nIo ho annuito.\n\nA casa Tigre si è rimesso sulla sedia vicino alla stufa, come se non fosse successo niente.\n\nIo invece ci ho pensato tutto il pomeriggio.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N20",
+      "title": "Ottobre 1938 – Le regole",
+      "x": 2496.127374160148,
+      "y": -544.3650401590171,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\ndopo quello che mi ha detto la mamma sono andato in camera mia.\n\nHo chiuso la porta piano, ma avevo voglia di sbatterla.\n\nPenso a queste regole nuove. Dicono cosa posso fare e cosa no, ma io non le capisco. Non le ho mai chieste.\n\nNon vado più a scuola.\nNon vedo più i miei compagni.\nNon posso più fare finta che sia tutto come prima.\n\nNe ho abbastanza.\n\nNon ho fatto niente di male. Non ho dato fastidio a nessuno, cosa vogliono da me?\n\nVedo Tigre che salta sul letto e si acciambella vicino a me.\n\nPerché non posso essere come lui?\nA lui le regole non le ha spiegate nessuno.\nPoi lo accarezzo piano, e mi addormento ancora vestito.",
+      "colorIndex": 0
+    },
+    {
+      "id": "N21",
+      "title": "fine ottobre 1938 – La febbre",
+      "x": 3053.9386250938846,
+      "y": -437.2701927347757,
+      "inputs": 1,
+      "outputs": 2,
+      "content": "Caro diario,\n\nsto male.\n\nHo caldo, ma anche i brividi. La testa gira e le lenzuola sembrano cartone bagnato. La mamma mi tocca la fronte e dice che scotto.\n\nSento papà parlare con la mamma, stanno cercando il nostro dottore.\nPurtroppo non può, ha molti impegni, magari passerà un altro giorno.\n\nDormo, dormo tanto. Certe volte mi sembra di non vedere mai il sole. Non so quanto tempo passa.\n\nUn giorno entra qualcuno che non conosco, con lui vedo la signora del pianerottolo. Parlano sottovoce, come se non volessero farsi sentire.\n\nL’uomo ha una borsa scura. Mi tocca la fronte, ascolta il respiro. Non mi chiede niente.\n\nParla solo con la mamma, scrive qualche cosa su un foglio e dopo mi danno una medicina amara e poi va via.\n\nLa mamma da una borsa alla vicina e chiude la porta, poi viene vicino a me, si siede a fianco del letto e mi accarezza fino a quando non mi addormento di nuovo.\n\nQuando mi sveglio Tigre dorme vicino ai miei piedi. Ogni tanto si muove e mi tocca la mano con la zampa.\n\nIo resto fermo, la febbre è passata.",
       "colorIndex": 0
     }
   ],
@@ -479,6 +519,102 @@
         "portIndex": 0
       },
       "label": "Sulla poltrona con anna dorme tigre."
+    },
+    {
+      "id": "E27",
+      "from": {
+        "nodeId": "N15",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N18",
+        "portIndex": 0
+      },
+      "label": "Ogni tanto si usciva di casa."
+    },
+    {
+      "id": "E28",
+      "from": {
+        "nodeId": "N17",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N19",
+        "portIndex": 0
+      },
+      "label": "una volta tigre è scappato di casa."
+    },
+    {
+      "id": "E29",
+      "from": {
+        "nodeId": "N15",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N19",
+        "portIndex": 0
+      },
+      "label": "Ho anche un gatto, si chiama Tigre"
+    },
+    {
+      "id": "E30",
+      "from": {
+        "nodeId": "N13",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N20",
+        "portIndex": 0
+      },
+      "label": "Quando è tropppo, è troppo"
+    },
+    {
+      "id": "E31",
+      "from": {
+        "nodeId": "N20",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N17",
+        "portIndex": 0
+      },
+      "label": "non ti ho ancora parlato di Tigre"
+    },
+    {
+      "id": "E32",
+      "from": {
+        "nodeId": "N20",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N21",
+        "portIndex": 0
+      },
+      "label": "e poi mi sono ammalato."
+    },
+    {
+      "id": "E33",
+      "from": {
+        "nodeId": "N21",
+        "portIndex": 1
+      },
+      "to": {
+        "nodeId": "N19",
+        "portIndex": 0
+      },
+      "label": "Tigro è fuggito"
+    },
+    {
+      "id": "E34",
+      "from": {
+        "nodeId": "N21",
+        "portIndex": 0
+      },
+      "to": {
+        "nodeId": "N18",
+        "portIndex": 0
+      },
+      "label": "Quando sono guarito siamo usciti"
     }
   ]
 }
