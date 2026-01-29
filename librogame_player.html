@@ -1,0 +1,350 @@
+﻿<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Librogame Player</title>
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f1b2e;
+      --panel:#f8fafc;
+      --ink:#0b1220;
+      --accent:#ff7a59;
+      --accent2:#22d3ee;
+      --muted:#6b7280;
+      --shadow:0 18px 50px rgba(2,6,23,.45);
+      --radius:18px;
+      --serif:"Cormorant Garamond", "Times New Roman", Times, serif;
+      --sans:"Manrope", "Segoe UI", system-ui, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0;}
+    body{
+      font-family:var(--sans);
+      color:#eef2f7;
+      background:
+        radial-gradient(800px 500px at 10% 10%, rgba(34,211,238,.18), transparent 60%),
+        radial-gradient(900px 700px at 90% 20%, rgba(255,122,89,.14), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .shell{
+      width:min(900px, 100%);
+      position:relative;
+    }
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+      color:#cbd5e1;
+      font-size:13px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(148,163,184,.25);
+      backdrop-filter: blur(8px);
+    }
+    .panel{
+      background:var(--panel);
+      color:var(--ink);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:26px 28px 22px 28px;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel:before{
+      content:"";
+      position:absolute; inset:-2px;
+      border-radius:var(--radius);
+      padding:2px;
+      background:linear-gradient(120deg, rgba(34,211,238,.55), rgba(255,122,89,.5));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events:none;
+    }
+    .title{
+      font-family:var(--serif);
+      font-size:30px;
+      font-weight:700;
+      margin:0 0 6px 0;
+      letter-spacing:.2px;
+    }
+    .chapter{
+      font-family:var(--serif);
+      font-size:22px;
+      font-weight:700;
+      margin:0 0 14px 0;
+      color:#0f172a;
+    }
+    .text{
+      font-family:var(--serif);
+      font-size:18px;
+      line-height:1.55;
+      white-space:pre-wrap;
+      color:#0f172a;
+    }
+    .choices{
+      margin-top:18px;
+      display:grid;
+      gap:10px;
+    }
+    .choiceBtn{
+      text-align:left;
+      border:none;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius:12px;
+      background:#0f172a;
+      color:#f8fafc;
+      font-weight:700;
+      box-shadow:0 8px 20px rgba(2,6,23,.25);
+    }
+    .choiceBtn:hover{filter:brightness(1.05)}
+    .choiceBtn:active{transform:translateY(1px)}
+    .metaRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:16px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .tinyBtn{
+      border:1px solid rgba(148,163,184,.5);
+      background:transparent;
+      color:#0f172a;
+      border-radius:10px;
+      padding:6px 10px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .fileBtn input{display:none}
+    .fileBtn span{
+      display:inline-block;
+      border:1px dashed rgba(148,163,184,.7);
+      padding:6px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      color:#0f172a;
+      font-weight:700;
+    }
+    .error{
+      margin-top:12px;
+      padding:10px 12px;
+      background:#fee2e2;
+      color:#7f1d1d;
+      border-radius:10px;
+      border:1px solid #fecaca;
+      font-size:13px;
+    }
+    @media (max-width:640px){
+      .panel{padding:20px}
+      .title{font-size:26px}
+      .chapter{font-size:20px}
+      .text{font-size:17px}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="badge" id="bookStatus">Librogame Player</div>
+      <div class="badge" id="chapterStatus">Caricamento…</div>
+    </div>
+
+    <div class="panel">
+      <h1 class="title" id="bookTitle">Librogame</h1>
+      <div class="chapter" id="chapterTitle"></div>
+      <div class="text" id="chapterText"></div>
+      <div class="choices" id="choices"></div>
+
+      <div class="metaRow">
+        <button class="tinyBtn" id="btnRestart">Ricomincia</button>
+        <label class="fileBtn">
+          <span>Carica JSON</span>
+          <input id="fileInput" type="file" accept="application/json" />
+        </label>
+        <span id="metaInfo"></span>
+      </div>
+
+      <div class="error" id="errorBox" style="display:none"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const bookTitleEl = document.getElementById('bookTitle');
+  const chapterTitleEl = document.getElementById('chapterTitle');
+  const chapterTextEl = document.getElementById('chapterText');
+  const choicesEl = document.getElementById('choices');
+  const chapterStatusEl = document.getElementById('chapterStatus');
+  const metaInfoEl = document.getElementById('metaInfo');
+  const errorBox = document.getElementById('errorBox');
+  const fileInput = document.getElementById('fileInput');
+  const btnRestart = document.getElementById('btnRestart');
+
+  const state = {
+    nodes: new Map(),
+    edges: [],
+    currentId: null,
+    loadedName: 'librogame_project.json'
+  };
+
+  function showError(msg){
+    errorBox.textContent = msg;
+    errorBox.style.display = 'block';
+  }
+  function clearError(){
+    errorBox.style.display = 'none';
+  }
+
+  function validateData(data){
+    if (!data || typeof data !== 'object') return 'JSON non valido.';
+    if (!Array.isArray(data.nodes) || !Array.isArray(data.edges)) return 'Struttura non riconosciuta.';
+    const hasId = data.nodes.every(n => n && typeof n.id === 'string');
+    if (!hasId) return 'Nodi mancanti o non validi.';
+    return null;
+  }
+
+  function indexData(data){
+    state.nodes.clear();
+    state.edges = [];
+    for (const n of data.nodes) {
+      state.nodes.set(n.id, {
+        id: n.id,
+        title: (n.title || n.id).toString(),
+        content: (n.content || '').toString()
+      });
+    }
+    for (const e of data.edges) {
+      if (!e || !e.from || !e.to) continue;
+      state.edges.push({
+        fromId: e.from.nodeId,
+        toId: e.to.nodeId,
+        label: (e.label || '').toString()
+      });
+    }
+  }
+
+  function pickStartNode(){
+    const nodes = Array.from(state.nodes.values());
+    const byTitle = nodes.find(n => (n.title || '').trim().toLowerCase() === 'inizio');
+    if (byTitle) return byTitle.id;
+    const byOne = nodes.find(n => (n.title || '').trim() === '1');
+    if (byOne) return byOne.id;
+    const byIdNum = nodes.slice().sort((a,b) => extractNum(a.id) - extractNum(b.id))[0];
+    return byIdNum ? byIdNum.id : null;
+  }
+
+  function extractNum(id){
+    const m = String(id).match(/\d+/);
+    return m ? Number(m[0]) : 0;
+  }
+
+  function renderNode(nodeId, pushHistory=true){
+    const node = state.nodes.get(nodeId);
+    if (!node) {
+      showError('Capitolo non trovato.');
+      return;
+    }
+    clearError();
+    state.currentId = nodeId;
+
+    chapterTitleEl.textContent = node.title || '';
+    chapterTextEl.textContent = node.content || '';
+
+    const outgoing = state.edges.filter(e => e.fromId === nodeId);
+    choicesEl.innerHTML = '';
+
+    if (outgoing.length === 0) {
+      const end = document.createElement('div');
+      end.style.fontWeight = '700';
+      end.textContent = 'Fine.';
+      choicesEl.appendChild(end);
+    } else {
+      outgoing.forEach(e => {
+        const target = state.nodes.get(e.toId);
+        const label = (e.label && e.label.trim()) ? e.label.trim() : 'Vai avanti';
+        const btn = document.createElement('button');
+        btn.className = 'choiceBtn';
+        btn.textContent = `${label} → ${target ? (target.title || e.toId) : e.toId}`;
+        btn.addEventListener('click', () => {
+          if (!target) {
+            showError('Capitolo di destinazione mancante.');
+            return;
+          }
+          renderNode(e.toId);
+        });
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    chapterStatusEl.textContent = `Capitolo ${nodeId}`;
+    metaInfoEl.textContent = `File: ${state.loadedName}`;
+  }
+
+  async function loadFromText(text, name){
+    let data;
+    try { data = JSON.parse(text); }
+    catch { showError('JSON non valido.'); return; }
+
+    const err = validateData(data);
+    if (err) { showError(err); return; }
+
+    state.loadedName = name || 'librogame_project.json';
+    indexData(data);
+
+    const startId = pickStartNode();
+    if (!startId) { showError('Nessun capitolo trovato.'); return; }
+    renderNode(startId, false);
+  }
+
+  async function loadDefault(){
+    try {
+      const res = await fetch('librogame_project.json', {cache: 'no-store'});
+      if (!res.ok) throw new Error('not found');
+      const text = await res.text();
+      await loadFromText(text, 'librogame_project.json');
+      return true;
+    } catch {
+      showError('Impossibile caricare librogame_project.json. Usa “Carica JSON”.');
+      return false;
+    }
+  }
+
+  fileInput.addEventListener('change', async () => {
+    const f = fileInput.files && fileInput.files[0];
+    if (!f) return;
+    const text = await f.text();
+    await loadFromText(text, f.name);
+    fileInput.value = '';
+  });
+
+  btnRestart.addEventListener('click', () => {
+    const startId = pickStartNode();
+    if (startId) renderNode(startId, false);
+  });
+
+  window.addEventListener('load', () => {
+    loadDefault();
+  });
+})();
+</script>
+</body>
+</html>

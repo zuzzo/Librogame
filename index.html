@@ -425,6 +425,47 @@
     redrawAllEdges();
   }
 
+  function openHandleDb() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('librogame_fs', 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('handles')) db.createObjectStore('handles');
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function idbGetHandle(key) {
+    try {
+      const db = await openHandleDb();
+      return await new Promise((resolve) => {
+        const tx = db.transaction('handles', 'readonly');
+        const store = tx.objectStore('handles');
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  async function idbSetHandle(key, value) {
+    try {
+      const db = await openHandleDb();
+      return await new Promise((resolve) => {
+        const tx = db.transaction('handles', 'readwrite');
+        const store = tx.objectStore('handles');
+        store.put(value, key);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      });
+    } catch {
+      return false;
+    }
+  }
   function screenToWorld(clientX, clientY) {
     const rect = stageWrap.getBoundingClientRect();
     const sx = clientX - rect.left;
@@ -788,7 +829,7 @@
 
   function redrawPreview(clientX, clientY) {
     if (!state.linkFrom) return;
-    const a = getPortWorldPos(state.linkFrom.nodeId, 'out', state.linkFrom.portIndex);
+    const a = getPortWorldPos(state.linkFrom.nodeId, state.linkFrom.kind, state.linkFrom.portIndex);
     if (!a) return;
     const b = screenToWorld(clientX, clientY);
     previewPath.setAttribute('d', bezierPath(a, b));
@@ -851,6 +892,14 @@
   });
 
   stageWrap.addEventListener('wheel', (ev) => {
+    const el = ev.target;
+    const isEditable = el instanceof HTMLElement &&
+      (el.tagName === 'TEXTAREA' ||
+       el.tagName === 'INPUT' ||
+       el.tagName === 'SELECT' ||
+       el.isContentEditable ||
+       el.closest('[contenteditable="true"]'));
+    if (isEditable) return;
     ev.preventDefault();
     const zoomIntensity = 0.0016;
     const delta = -ev.deltaY;
@@ -918,17 +967,21 @@
     const json = JSON.stringify(data, null, 2);
     if ('showSaveFilePicker' in window) {
       try {
-        const handle = await window.showSaveFilePicker({
+        const lastHandle = await idbGetHandle('lastSaveHandle');
+        const pickerOptions = {
           suggestedName: 'librogame_project.json',
           types: [{description: 'JSON', accept: {'application/json': ['.json']}}]
-        });
+        };
+        if (lastHandle) pickerOptions.startIn = lastHandle;
+        const handle = await window.showSaveFilePicker(pickerOptions);
+        await idbSetHandle('lastSaveHandle', handle);
         const writable = await handle.createWritable();
         await writable.write(json);
         await writable.close();
         return;
       } catch (err) {
         if (err && err.name === 'AbortError') return;
-        alert('Salvataggio non riuscito, userò il download tradizionale.');
+        alert('Salvataggio non riuscito, usero il download tradizionale.');
       }
     }
     const blob = new Blob([json], {type:'application/json'});
