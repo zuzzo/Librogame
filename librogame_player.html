@@ -126,9 +126,9 @@
       width:min(900px, 92vw);
       aspect-ratio:2 / 3;
       max-height:90vh;
-      object-fit:cover;
+      object-fit:contain;
       border-radius:var(--radius);
-      box-shadow:0 18px 50px rgba(2,6,23,.35);
+      box-shadow:0 18px 50px rgba(2,6,23,.35);\n      background: rgba(15,23,42,.2);
       display:none;
     }
     .choices{
@@ -1023,7 +1023,7 @@
     const embedded = document.getElementById('embeddedJson');
     const text = embedded ? embedded.textContent.trim() : '';
     if (!text) {
-      showError('Modalita offline: usa “Carica JSON” per aprire il file.');
+      showError('Modalita offline: usa ï¿½Carica JSONï¿½ per aprire il file.');
       return false;
     }
     loadFromText(text, 'librogame_project.json');
