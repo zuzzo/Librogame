@@ -203,6 +203,20 @@
       letter-spacing:.6px;
       color:var(--muted);
     }
+    .chapterWrap input.chapterImage{
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 10px;
+      border: 1px solid rgba(36,48,70,.7);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      padding: 8px 10px;
+      font-family: var(--mono);
+      outline: none;
+    }
+    .chapterWrap input.chapterImage:focus{
+      border-color: rgba(96,165,250,.7);
+    }
     textarea.chapterText{
       width: 100%;
       box-sizing: border-box;
@@ -477,9 +491,9 @@
     return {x: wx * state.scale + state.panX, y: wy * state.scale + state.panY};
   }
 
-  function makeNode({x, y, title, inputs=1, outputs=2, content="", colorIndex=0}={}) {
+  function makeNode({x, y, title, inputs=1, outputs=2, content="", image="", colorIndex=0}={}) {
     const id = `N${state.nextNodeId++}`;
-    const node = { id, title: title ?? `Capitolo ${id}`, x: x ?? 200, y: y ?? 140, inputs, outputs, content, colorIndex };
+    const node = { id, title: title ?? `Capitolo ${id}`, x: x ?? 200, y: y ?? 140, inputs, outputs, content, image, colorIndex };
     state.nodes.set(id, node);
     renderNode(node);
     redrawAllEdges();
@@ -536,6 +550,9 @@
         <div class="chapterWrap">
           <label>Testo capitolo</label>
           <textarea class="chapterText" placeholder="Scrivi qui il contenuto del capitolo..."></textarea>
+          <label>Immagine (opzionale)</label>
+          <input class="chapterImage" type="file" accept="image/*" />
+          <div class="imageInfo" data-bind="imageInfo"></div>
         </div>
       `;
 
@@ -545,7 +562,7 @@
       header.addEventListener('pointerdown', (ev) => {
         const target = ev.target;
         if (target.closest('.iconBtn')) return;
-        if (target.classList.contains('chapterText')) return;
+        if (target.classList.contains('chapterText') || target.classList.contains('chapterImage')) return;
         if (!target.classList.contains('nodeTitle')) {
           ev.preventDefault();
         }
@@ -588,6 +605,23 @@
         if (!n) return;
         n.content = textEl.value;
       });
+      const imageEl = el.querySelector('input.chapterImage');
+      imageEl.addEventListener('change', () => {
+        const n = state.nodes.get(node.id);
+        if (!n) return;
+        const file = imageEl.files && imageEl.files[0];
+        if (!file) {
+          n.image = '';
+          renderNode(n);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          n.image = String(reader.result || '');
+          renderNode(n);
+        };
+        reader.readAsDataURL(file);
+      });
 
       el.addEventListener('click', (ev) => {
         const btn = ev.target.closest('[data-action]');
@@ -596,7 +630,7 @@
         if (action === 'del') deleteNode(node.id);
         else if (action === 'dup') {
           const n = state.nodes.get(node.id);
-          makeNode({x:n.x+40, y:n.y+40, title:n.title + ' (copia)', inputs:n.inputs, outputs:n.outputs, content:n.content, colorIndex:n.colorIndex});
+          makeNode({x:n.x+40, y:n.y+40, title:n.title + ' (copia)', inputs:n.inputs, outputs:n.outputs, content:n.content, image:n.image, colorIndex:n.colorIndex});
         } else if (action === 'in+') updatePorts(node.id, 'in', +1);
         else if (action === 'in-') updatePorts(node.id, 'in', -1);
         else if (action === 'out+') updatePorts(node.id, 'out', +1);
@@ -613,6 +647,8 @@
     el.querySelector('[data-bind="inCount"]').textContent = String(node.inputs);
     el.querySelector('[data-bind="outCount"]').textContent = String(node.outputs);
     el.querySelector('textarea.chapterText').value = node.content || "";
+    const imageInfo = el.querySelector('[data-bind="imageInfo"]');
+    imageInfo.textContent = node.image ? 'Immagine impostata' : 'Nessuna immagine';
 
     const colorSelect = el.querySelector('[data-color-select="true"]');
     const inPortsEl = el.querySelector('[data-ports="in"]');
@@ -1051,6 +1087,7 @@
         inputs: Number(n.inputs || 0),
         outputs: Number(n.outputs || 0),
         content: (n.content || '').toString(),
+        image: (n.image || '').toString(),
         colorIndex: Number.isFinite(n.colorIndex) ? Number(n.colorIndex) : 0
       });
     }
@@ -1229,3 +1266,10 @@
 </script>
 </body>
 </html>
+    .chapterWrap .imageInfo{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:6px;
+      font-family:var(--mono);
+      word-break:break-all;
+    }
